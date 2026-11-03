@@ -57,7 +57,7 @@ The plugin adds to the base routes with `server.append` and never replaces them:
 
 On the sandbox, a single session that opened the checkout page twice and placed an order counted as one checkout start, one shipping step, one payment step and one purchase.
 
-Sales figures are read from the orders by the `Analytics-ReconcileOrders` job. Each order keeps what it last contributed (`Order.custom.analyticsSnapshot`), so when an order is paid later, cancelled or refunded, the reports change by exactly the difference. Re-running the job changes nothing.
+Sales figures are read from the orders by the `ReconcileOrders` step of `Analytics-Job`. Each order keeps what it last contributed (`Order.custom.analyticsSnapshot`), so when an order is paid later, cancelled or refunded, the reports change by exactly the difference. Re-running the job changes nothing.
 
 ### Overview
 
@@ -138,6 +138,12 @@ Terms are stored lowercase, at most 50 characters long, and never when they look
 CSV export is its own permission, separate from viewing the reports.
 
 ![CSV export](docs/images/bm-analytics-export.png)
+
+## Background job
+
+All background work runs in one Business Manager job, `Analytics-Job`, with its steps in order. Steps that run less often than the job keep their own timing with `RunEveryMinutes` or `RunAtHourUTC`, and finish `NOT_DUE` when skipped. A failing step doesn't stop the next one, and the last step, `ReportFailures`, then marks the job `ERROR`.
+
+Upgrading from a version with several jobs? Import `metadata/retired-jobs/jobs.xml` once to delete the old ones.
 
 ## Guides
 

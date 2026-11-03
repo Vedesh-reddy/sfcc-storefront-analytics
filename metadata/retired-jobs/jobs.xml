@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jobs xmlns="http://www.demandware.com/xml/impex/jobs/2015-07-01">
+    <job job-id="Analytics-AggregateEvents" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="Analytics-ReconcileOrders" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="Analytics-GenerateRankings" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="Analytics-Cleanup" mode="delete">
+        <triggers/>
+    </job>
+    <job job-id="Analytics-IntegrityCheck" mode="delete">
+        <triggers/>
+    </job>
+</jobs>
