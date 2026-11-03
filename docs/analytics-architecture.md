@@ -26,14 +26,14 @@ Browser (analytics.js, 2.7 KB)                     Server routes (append)
         v                                                       |
   Analytics-Collect  -- validate, dedupe, mark firsts -->  AnalyticsEventBatch (1 per request)
                                                                 |
-                                       Analytics-AggregateEvents (job, writer lock)
+                                       AggregateEvents step (writer lock)
                                                                 v
-      Orders (authoritative) --> Analytics-ReconcileOrders --> AnalyticsProductDaily
+      Orders (authoritative) --> ReconcileOrders step --> AnalyticsProductDaily
          order.custom.analyticsSnapshot (last contribution)     AnalyticsCategoryDaily
                                                                 AnalyticsSiteDaily
                                                                 AnalyticsSearchDaily
                                                                 |
-                         Analytics-GenerateRankings --> AnalyticsRanking
+                         GenerateRankings step --> AnalyticsRanking
                                                                 |
                                          Business Manager: Merchant Tools > Storefront Analytics
 ```
@@ -45,7 +45,7 @@ Browser (analytics.js, 2.7 KB)                     Server routes (append)
 | `view_item_list`, `select_item`, `view_item`, `search` | Browser beacon | No money involved. Validated, rate-limited, best effort |
 | `add_to_cart` | `Cart-AddProduct` append, only when the base route succeeded | Unit price read from the basket line |
 | `begin_checkout`, `add_shipping_info`, `add_payment_info` | Checkout route appends, after the base route accepted the step | Basket values only |
-| `purchase` | **Orders only**, through `Analytics-ReconcileOrders` | Yes — the order is the only source of sales figures |
+| `purchase` | **Orders only**, through `ReconcileOrders` step of `Analytics-Job` | Yes — the order is the only source of sales figures |
 
 A browser cannot send `purchase`, `add_to_cart` or checkout events: `Analytics-Collect` accepts only the four browser events above.
 
